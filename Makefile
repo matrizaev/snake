@@ -1,4 +1,4 @@
-PREFIX ?= 
+PREFIX ?=
 BUILD_DIR = build
 SRC_DIR = src
 BIN_DIR = bin

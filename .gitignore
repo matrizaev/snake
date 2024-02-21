@@ -54,3 +54,8 @@ dkms.conf
 # Project specific
 bin/
 build/
+.vscode/
+tests/*
+!tests/*.c
+!tests/runtests.sh
+!tests/minunit.h
