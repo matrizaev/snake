@@ -36,7 +36,7 @@ void draw_berry(point_t berry)
 void draw_stats(WINDOW *win, snake_t *snake)
 {
     wborder(win, '|', '|', '-', '-', '+', '+', '+', '+');
-    mvprintw(0, 2, "Score: %d", snake->length - 1);
+    mvprintw(0, 2, "Score: %zu", snake->length - 1);
 }
 
 WINDOW *init_ncurses()
