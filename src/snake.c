@@ -46,7 +46,7 @@ WINDOW *init_ncurses()
     check(wborder(win, '|', '|', '-', '-', '+', '+', '+', '+') == OK, "wborder failed");
     check(keypad(win, true) == OK, "keypad failed");
     check(nodelay(win, true) == OK, "nodelay failed");
-    curs_set(0);
+    check(curs_set(0) != ERR, "curs_set failed");
     check(start_color() == OK, "start_solor failed");
     check(init_pair(SNAKE_COLOR_PAIR, COLOR_GREEN, COLOR_BLACK) == OK, "init_pair failed");
     check(init_pair(BERRY_COLOR_PAIR, COLOR_RED, COLOR_BLACK) == OK, "init_pair failed");
