@@ -30,13 +30,16 @@ error:
 void snake_grow(snake_t *snake)
 {
     check(snake, "snake is null");
-    snake->length++;
-    snake->body[snake->length - 1] = snake->body[snake->length - 2];
+    if (snake->length < MAX_SNAKE_LENGTH)
+    {
+        snake->length++;
+        snake->body[snake->length - 1] = snake->body[snake->length - 2];
+    }
 error:
     return;
 }
 
-void snake_set_direction(snake_t *snake, point_t direction)
+void snake_set_direction(snake_t *snake, const point_t direction)
 {
     check(snake, "snake is null");
     int dir_len = dot_product(direction, direction);
@@ -53,21 +56,25 @@ error:
 void snake_speedup(snake_t *snake)
 {
     check(snake, "snake is null");
-    if (snake->speed >= MAX_SNAKE_SPEED)
+    if (snake->speed < MAX_SNAKE_SPEED)
     {
-        return;
+        snake->speed += 0.1;
     }
-    snake->speed += 0.1;
 error:
     return;
 }
 
-bool snake_test_collision(snake_t *snake, point_t point)
+bool is_collision(const point_t a, const point_t b, const point_t direction)
+{
+    return (a.x == b.x && a.y == b.y) || ((a.x - direction.x) == b.x && a.y == b.y);
+}
+
+bool snake_test_collision(const snake_t *snake, const point_t point)
 {
     check(snake, "snake is null");
     for (size_t i = 0; i < snake->length; i++)
     {
-        if ((snake->body[i].x == point.x || ((snake->body[i].x - snake->direction.x) == point.x)) && snake->body[i].y == point.y)
+        if (is_collision(snake->body[i], point, snake->direction))
         {
             return true;
         }
@@ -76,7 +83,7 @@ error:
     return false;
 }
 
-bool snake_try_eat_food(snake_t *snake, point_t food)
+bool snake_try_eat_food(snake_t *snake, const point_t food)
 {
     check(snake, "snake is null");
     if (snake_test_collision(snake, food))
@@ -89,13 +96,13 @@ error:
     return false;
 }
 
-bool snake_try_eat_self(snake_t *snake)
+bool snake_try_eat_self(const snake_t *snake)
 {
     check(snake, "snake is null");
     if (snake->length > 4)
         for (size_t i = 1; i < snake->length; i++)
         {
-            if ((snake->body[i].x == snake->body[0].x || ((snake->body[0].x - snake->direction.x) == snake->body[i].x)) && snake->body[i].y == snake->body[0].y)
+            if (is_collision(snake->body[0], snake->body[i], snake->direction))
             {
                 return true;
             }
@@ -104,7 +111,7 @@ error:
     return false;
 }
 
-bool snake_try_hit_walls(snake_t *snake, int field_width, int field_height)
+bool snake_try_hit_walls(const snake_t *snake, const int field_width, const int field_height)
 {
     check(snake, "snake is null");
     if (snake->body[0].x < 1 || snake->body[0].x >= field_width - 1 || snake->body[0].y < 1 || snake->body[0].y >= field_height - 1)
