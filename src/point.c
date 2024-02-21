@@ -1,6 +1,6 @@
 #include "point.h"
 
-int dot_product(point_t a, point_t b)
+inline int dot_product(const point_t a, const point_t b)
 {
     return a.x * b.x + a.y * b.y;
 }
