@@ -5,6 +5,7 @@
 
 #include "point.h"
 #include "snake_obj.h"
+#include "dbg.h"
 
 #define SNAKE_COLOR_PAIR 1
 #define BERRY_COLOR_PAIR 2
@@ -41,21 +42,27 @@ void draw_stats(WINDOW *win, snake_t *snake)
 WINDOW *init_ncurses()
 {
     WINDOW *win = initscr();
-    wborder(win, '|', '|', '-', '-', '+', '+', '+', '+');
-    keypad(win, true);
-    nodelay(win, true);
+    check(win != NULL, "initscr failed");
+    check(wborder(win, '|', '|', '-', '-', '+', '+', '+', '+') == OK, "wborder failed");
+    check(keypad(win, true) == OK, "keypad failed");
+    check(nodelay(win, true) == OK, "nodelay failed");
     curs_set(0);
-    start_color();
-    init_pair(SNAKE_COLOR_PAIR, COLOR_GREEN, COLOR_BLACK);
-    init_pair(BERRY_COLOR_PAIR, COLOR_RED, COLOR_BLACK);
-    wrefresh(win);
+    check(start_color() == OK, "start_solor failed");
+    check(init_pair(SNAKE_COLOR_PAIR, COLOR_GREEN, COLOR_BLACK) == OK, "init_pair failed");
+    check(init_pair(BERRY_COLOR_PAIR, COLOR_RED, COLOR_BLACK) == OK, "init_pair failed");
+    check(wrefresh(win) == OK, "wrefresh failed");
     return win;
+error:
+    return NULL;
 }
 
 int main()
 {
 
+    int result = -1;
+
     WINDOW *win = init_ncurses();
+    check(win != NULL, "failed to initialize ncurses");
 
     snake_t snake = {0};
 
@@ -106,6 +113,8 @@ int main()
         usleep(125000 / snake.speed);
     }
     wgetch(win);
+    result = 0;
+error:
     endwin();
-    return 0;
+    return result;
 }
