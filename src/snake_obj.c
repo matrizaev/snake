@@ -2,16 +2,14 @@
 #include "snake_obj.h"
 #include "dbg.h"
 
-void snake_init(snake_t *snake)
+snake_t snake_create()
 {
-    check(snake, "snake is null");
-    *snake = (snake_t){
+    snake_t snake = {
         .length = 1,
-        .direction = (point_t){0, 0},
-        .body = {(point_t){1, 1}},
+        .direction = (point_t){.x = 0, .y = 0},
+        .body = {(point_t){.x = 1, .y = 1}},
         .speed = 1.0};
-error:
-    return;
+    return snake;
 }
 
 void snake_move(snake_t *snake)
@@ -64,12 +62,12 @@ error:
     return;
 }
 
-bool is_collision(const point_t a, const point_t b, const point_t direction)
+static bool is_collision(const point_t a, const point_t b, const point_t direction)
 {
     return (a.x == b.x && a.y == b.y) || ((a.x - direction.x) == b.x && a.y == b.y);
 }
 
-bool snake_test_collision(const snake_t *snake, const point_t point)
+bool snake_test_collision(const snake_t *const snake, const point_t point)
 {
     check(snake, "snake is null");
     for (size_t i = 0; i < snake->length; i++)
@@ -96,7 +94,7 @@ error:
     return false;
 }
 
-bool snake_try_eat_self(const snake_t *snake)
+bool snake_try_eat_self(const snake_t *const snake)
 {
     check(snake, "snake is null");
     if (snake->length > 4)
@@ -111,7 +109,7 @@ error:
     return false;
 }
 
-bool snake_try_hit_walls(const snake_t *snake, const int field_width, const int field_height)
+bool snake_try_hit_walls(const snake_t *const snake, int field_width, int field_height)
 {
     check(snake, "snake is null");
     if (snake->body[0].x < 1 || snake->body[0].x >= field_width - 1 || snake->body[0].y < 1 || snake->body[0].y >= field_height - 1)

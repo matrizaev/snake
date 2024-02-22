@@ -1,4 +1,5 @@
 #ifndef POINT_H
+#define POINT_H
 
 typedef struct
 {
@@ -7,5 +8,4 @@ typedef struct
 
 int dot_product(const point_t a, const point_t b);
 
-#define POINT_H
 #endif

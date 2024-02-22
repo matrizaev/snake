@@ -1,4 +1,5 @@
 #ifndef SNAKE_OBH_H
+#define SNAKE_OBH_H
 
 #include <stddef.h>
 #include <stdbool.h>
@@ -16,14 +17,13 @@ typedef struct
     float speed;
 } snake_t;
 
-void snake_init(snake_t *snake);
+snake_t snake_create();
 void snake_move(snake_t *snake);
 void snake_grow(snake_t *snake);
 void snake_set_direction(snake_t *snake, const point_t direction);
 void snake_speedup(snake_t *snake);
 bool snake_try_eat_food(snake_t *snake, const point_t food);
-bool snake_try_eat_self(const snake_t *snake);
-bool snake_try_hit_walls(const snake_t *snake, const int field_width, const int field_height);
+bool snake_try_eat_self(const snake_t *const snake);
+bool snake_try_hit_walls(const snake_t *const snake, int field_width, int field_height);
 
-#define SNAKE_OBH_H
 #endif

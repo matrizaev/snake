@@ -3,8 +3,8 @@
 
 char *test_snake_obj()
 {
-    snake_t snake = {0};
-    snake_init(&snake);
+    snake_t snake = snake_create();
+
     mu_assert(snake.length == 1, "Snake length is not 1");
     mu_assert(snake.speed == 1.0, "Snake speed is not 1");
     mu_assert(snake.body[0].x == 1 && snake.body[0].y == 1, "Snake position is not 1, 1");

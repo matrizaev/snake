@@ -10,12 +10,12 @@
 #define SNAKE_COLOR_PAIR 1
 #define BERRY_COLOR_PAIR 2
 
-point_t new_berry()
+static point_t new_berry()
 {
-    return (point_t){rand() % (COLS - 1) + 1, rand() % (LINES - 1) + 1};
+    return (point_t){.x = rand() % (COLS - 1) + 1, .y = rand() % (LINES - 1) + 1};
 }
 
-void draw_snake(snake_t *snake)
+static void draw_snake(const snake_t *const snake)
 {
     attron(COLOR_PAIR(SNAKE_COLOR_PAIR));
     mvaddch(snake->body[0].y, snake->body[0].x, 'O');
@@ -26,17 +26,17 @@ void draw_snake(snake_t *snake)
     attroff(COLOR_PAIR(SNAKE_COLOR_PAIR));
 }
 
-void draw_berry(point_t berry)
+static void draw_berry(point_t berry)
 {
     attron(COLOR_PAIR(BERRY_COLOR_PAIR));
     mvaddch(berry.y, berry.x, '@');
     attroff(COLOR_PAIR(BERRY_COLOR_PAIR));
 }
 
-void draw_stats(WINDOW *win, snake_t *snake)
+static void draw_stats(WINDOW *win, size_t score)
 {
     wborder(win, '|', '|', '-', '-', '+', '+', '+', '+');
-    mvprintw(0, 2, "Score: %zu", snake->length - 1);
+    mvprintw(0, 2, "Score: %zu", score);
 }
 
 WINDOW *init_ncurses()
@@ -64,9 +64,7 @@ int main()
     WINDOW *win = init_ncurses();
     check(win != NULL, "failed to initialize ncurses");
 
-    snake_t snake = {0};
-
-    snake_init(&snake);
+    snake_t snake = snake_create();
     point_t berry = new_berry();
     bool running = true;
     while (running)
@@ -76,16 +74,16 @@ int main()
         switch (pressed)
         {
         case KEY_UP:
-            direction = (point_t){0, -1};
+            direction = (point_t){.x = 0, .y = -1};
             break;
         case KEY_DOWN:
-            direction = (point_t){0, 1};
+            direction = (point_t){.x = 0, .y = 1};
             break;
         case KEY_LEFT:
-            direction = (point_t){-1, 0};
+            direction = (point_t){.x = -1, .y = 0};
             break;
         case KEY_RIGHT:
-            direction = (point_t){1, 0};
+            direction = (point_t){.x = 1, .y = 0};
             break;
         case '\e':
             running = false;
@@ -107,7 +105,7 @@ int main()
         erase();
         snake_set_direction(&snake, direction);
         snake_move(&snake);
-        draw_stats(win, &snake);
+        draw_stats(win, snake.length);
         draw_snake(&snake);
         draw_berry(berry);
         usleep(125000 / snake.speed);
