@@ -24,6 +24,6 @@ void snake_set_direction(snake_t *snake, const point_t direction);
 void snake_speedup(snake_t *snake);
 bool snake_try_eat_food(snake_t *snake, const point_t food);
 bool snake_try_eat_self(const snake_t *const snake);
-bool snake_try_hit_walls(const snake_t *const snake, int field_width, int field_height);
+bool snake_try_hit_walls(const snake_t *const snake, const int field_width, const int field_height);
 
 #endif

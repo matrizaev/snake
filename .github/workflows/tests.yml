@@ -15,10 +15,13 @@ jobs:
     - name: install tools
       run: |
         sudo apt-get update
-        sudo apt-get install cppcheck
+        sudo apt-get install cppcheck cmake
     - name: static analysis
       run: cppcheck --error-exitcode=1 src/
     - name: build
-      run: make
+      run: |
+        cmake -S . -B build
+        cd build
+        make
     - name: test
       run: make test

@@ -109,7 +109,7 @@ error:
     return false;
 }
 
-bool snake_try_hit_walls(const snake_t *const snake, int field_width, int field_height)
+bool snake_try_hit_walls(const snake_t *const snake, const int field_width, const int field_height)
 {
     check(snake, "snake is null");
     if (snake->body[0].x < 1 || snake->body[0].x >= field_width - 1 || snake->body[0].y < 1 || snake->body[0].y >= field_height - 1)
