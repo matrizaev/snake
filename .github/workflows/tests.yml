@@ -18,10 +18,9 @@ jobs:
         sudo apt-get install cppcheck cmake
     - name: static analysis
       run: cppcheck --error-exitcode=1 src/
-    - name: build
+    - name: build and test
       run: |
         cmake -S . -B build
         cd build
         make
-    - name: test
-      run: make test
+        make test
